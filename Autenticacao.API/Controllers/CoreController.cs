@@ -3,8 +3,5 @@
 namespace Autenticacao.API.Controllers
 {
     [ApiController]
-    public class CoreController : ControllerBase
-    {
-
-    }
+    public class CoreController : ControllerBase { }
 }

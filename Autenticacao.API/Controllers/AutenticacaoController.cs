@@ -167,9 +167,9 @@ public class AutenticacaoController : CoreController
 
         if (principal is null) return BadRequest("Invalid access token or refresh token");
 
-        string username = principal.Identity.Name;
+        string? username = principal.Identity?.Name;
 
-        var user = await _userManager.FindByNameAsync(username);
+        var user = await _userManager.FindByNameAsync(username ?? throw new ArgumentException(nameof(username)));
 
         if (user is null || user.RefreshToken != refreshToken || user.RefreshTokenExpiryTime <= DateTime.Now)
         {
@@ -224,7 +224,7 @@ public class AutenticacaoController : CoreController
 
     private JwtSecurityToken CreateToken(List<Claim> authClaims)
     {
-        var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Secret"] ?? throw new ArgumentNullException()));
+        var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Secret"] ?? throw new ArgumentException("JWT:Secret")));
 
         _ = int.TryParse(_configuration["JWT:TokenValidityInMinutes"], out int tokenValidityInMinutes);
 
@@ -253,7 +253,7 @@ public class AutenticacaoController : CoreController
             ValidateAudience = false,
             ValidateIssuer = false,
             ValidateIssuerSigningKey = true,
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Secret"] ?? throw new ArgumentNullException())),
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Secret"] ?? throw new ArgumentException("JWT:Secret"))),
             ValidateLifetime = false
         };
 
