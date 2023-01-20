@@ -1,10 +1,10 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Autenticacao.API.Auth;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace Autenticacao.API.Data;
 
-public class AutenticacaoContext : IdentityDbContext<IdentityUser>
+public class AutenticacaoContext : IdentityDbContext<ApplicationUser>
 {
     public AutenticacaoContext(DbContextOptions<AutenticacaoContext> context) : base(context) { }
 
